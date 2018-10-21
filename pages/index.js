@@ -1,12 +1,13 @@
-import React from 'react'
+import React, {Fragment} from 'react'
+import Link from 'next/link'
 import Head from 'next/head'
 import styled from 'styled-components'
 
-import LoginForm from '../components/Auth/LoginForm'
+import LoginForm from '../components/LoginForm'
 import defaultPage from '../hocs/defaultPage'
 
 const index = () => (
-  <AppWrapper>
+  <Fragment>
     <Head>
       <title>Super OS</title>
     </Head>
@@ -19,22 +20,20 @@ const index = () => (
         <h1>Login in to Super OS</h1>
         <br />
         <h5>
-          or <a href="">create an account</a>
+          or{' '}
+          <Link href="signup" prefetch>
+            <a>create an account</a>
+          </Link>
         </h5>
 
         <LoginForm />
       </SectionWrapper>
     </FullPage>
     <Jumbotron />
-  </AppWrapper>
+  </Fragment>
 )
 
 // Styles
-const AppWrapper = styled.div`
-  height: 100%;
-  width: 100%;
-`
-
 const FullPage = styled.section`
   height: 100%;
   padding: 2em 1em 4em;
