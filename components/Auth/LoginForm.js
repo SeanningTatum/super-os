@@ -1,23 +1,85 @@
 import React from 'react'
+import {Mutation, withApollo} from 'react-apollo'
 import styled from 'styled-components'
+import gql from 'graphql-tag'
 
-const LoginForm = () => (
-  <LoginContainer>
-    <form>
-      <FormGroup>
-        <Label htmlFor="email">Email</Label>
-        <Input type="email" required />
-      </FormGroup>
+import redirect from '../../lib/redirect'
+import AuthService from '../../utils/authService'
 
-      <FormGroup>
-        <Label htmlFor="password">Password</Label>
-        <Input type="password" required />
-      </FormGroup>
+const SIGN_IN = gql`
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password)
+  }
+`
 
-      <SubmitButton>Log In</SubmitButton>
-    </form>
-  </LoginContainer>
-)
+const LoginForm = ({client}) => {
+  let email
+  let password
+
+  return (
+    <LoginContainer>
+      <Mutation
+        mutation={SIGN_IN}
+        onCompleted={data => {
+          const accessToken = data.login
+
+          // Store the token in cookie
+          AuthService.setToken(accessToken)
+
+          // Force a reload of all the current queries now that the user is
+          // logged in
+          client.cache.reset().then(() => {
+            redirect({}, '/secret')
+          })
+        }}
+      >
+        {(signin, {data, error}) => (
+          <form
+            onSubmit={e => {
+              e.preventDefault()
+              e.stopPropagation()
+
+              signin({
+                variables: {
+                  email: email.value,
+                  password: password.value,
+                },
+              })
+
+              email.value = ''
+              password.value = ''
+            }}
+          >
+            <FormGroup>
+              {error && <h5>{error.message}</h5>}
+              <Label htmlFor="email">Email</Label>
+              <Input
+                type="email"
+                required
+                ref={node => {
+                  email = node
+                }}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="password">Password</Label>
+              <Input
+                type="password"
+                required
+                ref={node => {
+                  password = node
+                }}
+              />
+            </FormGroup>
+
+            <SubmitButton>Log In</SubmitButton>
+          </form>
+        )}
+      </Mutation>
+    </LoginContainer>
+  )
+}
 
 const FormGroup = styled.div`
   margin-bottom: 0.75rem;
@@ -56,4 +118,4 @@ const SubmitButton = styled.button`
   padding: 0.7em 5em;
 `
 
-export default LoginForm
+export default withApollo(LoginForm)

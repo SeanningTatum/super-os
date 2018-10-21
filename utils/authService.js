@@ -2,12 +2,12 @@ import jwtDecode from 'jwt-decode'
 import Cookie from 'js-cookie'
 
 class AuthService {
-  setToken = (idToken, accessToken) => {
+  setToken = accessToken => {
     if (!process.browser) {
       return
     }
-    Cookie.set('user', jwtDecode(idToken))
-    Cookie.set('idToken', idToken)
+    Cookie.set('user', jwtDecode(accessToken))
+    Cookie.set('idToken', accessToken)
     // Cookie.set('accessToken', accessToken)
   }
 
