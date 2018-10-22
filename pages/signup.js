@@ -13,9 +13,15 @@ const Signup = () => (
 
     <FullPage>
       <SectionWrapper>
-        <HeadingText>Create a Super OS Account</HeadingText>
-        <h5>or sign in to your account</h5>
+        <LoginHeader>
+          <HeadingText>Create a Super OS Account</HeadingText>
+          <HeadingSubtitle>or sign in to your account</HeadingSubtitle>
+        </LoginHeader>
+        {/* Handles all the logic for signup */}
         <SignupForm />
+        <AcceptTermsMessage>
+          By creating an account, you agree to our Terms of Service and Privacy Policy.
+        </AcceptTermsMessage>
       </SectionWrapper>
     </FullPage>
   </Fragment>
@@ -23,7 +29,7 @@ const Signup = () => (
 
 const FullPage = styled.section`
   height: 100%;
-  padding: 2em 1em 4em;
+  padding: 3em 1em 4em;
   text-align: center;
 `
 
@@ -34,8 +40,26 @@ const SectionWrapper = styled.div`
 `
 
 const HeadingText = styled.h1`
-  font-size: 2rem;
+  font-size: 2.15rem;
   font-weight: 700;
+  margin-bottom: 0.5rem;
+`
+
+const HeadingSubtitle = styled.h3`
+  font-size: 18px;
+  font-weight: 400;
+`
+
+const LoginHeader = styled.div`
+  margin-bottom: 1.5rem;
+`
+
+const AcceptTermsMessage = styled.p`
+  color: #999;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  font-size: 14px;
+  line-height: 1.44rem;
 `
 
 export default defaultPage(Signup)

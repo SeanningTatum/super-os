@@ -87,6 +87,7 @@ class SignupForm extends Component {
                 required
                 value={state.username}
                 onChange={e => this.onInputChangedHandler('username', e.target.value)}
+                placeholder="e.g., Sean Urgel"
               />
             </FormGroup>
 
@@ -97,6 +98,7 @@ class SignupForm extends Component {
                 required
                 value={state.email}
                 onChange={e => this.onInputChangedHandler('email', e.target.value)}
+                placeholder="e.g., urgel@company.com"
               />
             </FormGroup>
 
@@ -107,6 +109,7 @@ class SignupForm extends Component {
                 required
                 value={state.password}
                 onChange={e => this.onInputChangedHandler('password', e.target.value)}
+                placeholder="e.g., "
               />
             </FormGroup>
 

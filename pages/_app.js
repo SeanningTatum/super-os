@@ -19,7 +19,7 @@ class MyApp extends App {
   render() {
     const {Component, pageProps, apolloClient} = this.props
     const cssFiles = [
-      // 'https://unpkg.com/normalize.css@5.0.0/normalize.css'
+      'https://unpkg.com/normalize.css@5.0.0/normalize.css',
       'https://fonts.googleapis.com/css?family=Open+Sans:400,700,800',
     ]
     return (
