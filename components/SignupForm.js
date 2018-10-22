@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
-import {Mutation} from 'react-apollo'
+import {Mutation, withApollo} from 'react-apollo'
 import gql from 'graphql-tag'
 
 import redirect from '../lib/redirect'
 import AuthService from '../utils/authService'
-import {Alert, Button, FormGroup, Input, Label} from '../styled-components'
+
+import {Alert, Button, FormGroup, Input, Label} from './UI'
 
 const REGISTER = gql`
   mutation register($email: String!, $username: String!, $password: String!) {
@@ -52,7 +53,7 @@ class SignupForm extends Component {
         mutation={REGISTER}
         onCompleted={data => {
           const {props} = this
-          const accessToken = data.login
+          const accessToken = data.register
 
           // Store the token in cookie
           AuthService.setToken(accessToken)
@@ -123,4 +124,4 @@ class SignupForm extends Component {
   }
 }
 
-export default SignupForm
+export default withApollo(SignupForm)

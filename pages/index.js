@@ -15,13 +15,11 @@ const index = () => (
       <SectionWrapper>
         <HeadingText>Welcome back to Super OS</HeadingText>
         <br />
-        <br />
-        <br />
         <h1>Login in to Super OS</h1>
         <br />
         <h5>
           or{' '}
-          <Link href="signup" prefetch>
+          <Link href="/signup" prefetch>
             <a>create an account</a>
           </Link>
         </h5>

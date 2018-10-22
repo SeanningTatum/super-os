@@ -1,11 +1,12 @@
 import React from 'react'
-import {Mutation} from 'react-apollo'
+import {Mutation, withApollo} from 'react-apollo'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 
 import redirect from '../lib/redirect'
 import AuthService from '../utils/authService'
-import {Button, FormGroup, Input, Label} from '../styled-components'
+
+import {Button, FormGroup, Input, Label, Alert} from './UI'
 
 const SIGN_IN = gql`
   mutation login($email: String!, $password: String!) {
@@ -52,7 +53,7 @@ const LoginForm = ({client}) => {
             }}
           >
             <FormGroup>
-              {error && <h5>{error.message}</h5>}
+              {error && error.graphQLErrors.map(({message}) => <Alert danger>{message}</Alert>)}
               <Label htmlFor="email">Email</Label>
               <Input
                 type="email"
@@ -87,4 +88,4 @@ const LoginContainer = styled.div`
   margin: 0 auto;
 `
 
-export default LoginForm
+export default withApollo(LoginForm)
