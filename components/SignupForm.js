@@ -79,7 +79,7 @@ class SignupForm extends Component {
               })
             }}
           >
-            {error && <Alert danger>{error.message}</Alert>}
+            {error && error.graphQLErrors.map(({message}) => <Alert danger>{message}</Alert>)}
             <FormGroup>
               <Label htmlFor="username">Username</Label>
               <Input

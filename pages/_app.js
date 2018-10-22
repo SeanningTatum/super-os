@@ -37,7 +37,7 @@ class MyApp extends App {
               }
 
               body {
-                background-color: rgb(248, 248, 248);
+                background-color: rgb(250, 250, 250);
               }
 
               input {

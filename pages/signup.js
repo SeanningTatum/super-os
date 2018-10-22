@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react'
 import styled from 'styled-components'
 import Head from 'next/head'
+import Link from 'next/link'
 
 import defaultPage from '../hocs/defaultPage'
 import SignupForm from '../components/SignupForm'
@@ -15,12 +16,25 @@ const Signup = () => (
       <SectionWrapper>
         <LoginHeader>
           <HeadingText>Create a Super OS Account</HeadingText>
-          <HeadingSubtitle>or sign in to your account</HeadingSubtitle>
+          <HeadingSubtitle>
+            or{' '}
+            <Link href="/" prefetch>
+              <a>sign in to your account</a>
+            </Link>
+          </HeadingSubtitle>
         </LoginHeader>
         {/* Handles all the logic for signup */}
         <SignupForm />
+        {/* ^^^^^^ */}
         <AcceptTermsMessage>
-          By creating an account, you agree to our Terms of Service and Privacy Policy.
+          By creating an account, you agree to our{' '}
+          <Link href="/">
+            <a>Terms of Service</a>
+          </Link>{' '}
+          and{' '}
+          <Link href="/">
+            <a>Privacy Policy.</a>
+          </Link>{' '}
         </AcceptTermsMessage>
       </SectionWrapper>
     </FullPage>
