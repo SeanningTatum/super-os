@@ -1,4 +1,5 @@
 import React from 'react'
+import Proptypes from 'prop-types'
 import styled from 'styled-components'
 import {withApollo} from 'react-apollo'
 
@@ -24,6 +25,11 @@ const Header = ({client}) => (
     </div>
   </HeaderWrapper>
 )
+
+Header.propTypes = {
+  // apollo client passed down to reset cache
+  client: Proptypes.object.isRequired, // eslint-disable-line
+}
 
 const HeaderWrapper = styled.header`
   position: sticky;

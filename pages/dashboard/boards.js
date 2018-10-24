@@ -1,4 +1,5 @@
 import React, {Fragment} from 'react'
+import PropTypes from 'prop-types'
 import Head from 'next/head'
 import styled from 'styled-components'
 import {Query} from 'react-apollo'
@@ -21,6 +22,12 @@ export const GET_BOARDS = gql`
 `
 
 class boards extends React.Component {
+  static propTypes = {
+    loggedUser: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  }
+
   state = {
     showModal: false,
   }
@@ -60,13 +67,30 @@ class boards extends React.Component {
                 }
 
                 return (
-                  <BoardsContainer>
-                    {boards.map(board => (
-                      <BoardCard style={{backgroundColor: board.background}} key={board.id}>
-                        <p>{board.name}</p>
-                      </BoardCard>
-                    ))}
-                  </BoardsContainer>
+                  <Fragment>
+                    <div
+                      style={{
+                        marginBottom: '1.5rem',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <h3>Your Boards</h3>
+                      <div>
+                        <Button small onClick={this.openModal} nomargin>
+                          Create Board
+                        </Button>
+                      </div>
+                    </div>
+                    <BoardsContainer>
+                      {boards.map(board => (
+                        <BoardCard style={{backgroundColor: board.background}} key={board.id}>
+                          <p>{board.name}</p>
+                        </BoardCard>
+                      ))}
+                    </BoardsContainer>
+                  </Fragment>
                 )
               }}
             </Query>
@@ -85,6 +109,7 @@ class boards extends React.Component {
 const Wrapper = styled.div`
   height: 100%;
   width: 100%;
+  padding: 1.5rem;
 `
 
 const NoBoardsContainer = styled.div`

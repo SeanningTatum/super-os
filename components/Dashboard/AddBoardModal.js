@@ -21,9 +21,9 @@ const CREATE_BOARD = gql`
 
 export default class AddBoardModal extends PureComponent {
   static propTypes = {
-    userID: PropTypes.string.isRequired,
-    open: PropTypes.bool.isRequired,
-    closeModal: PropTypes.func.isRequired,
+    userID: PropTypes.string.isRequired, // eslint-disable-line
+    open: PropTypes.bool.isRequired, // eslint-disable-line
+    closeModal: PropTypes.func.isRequired, // eslint-disable-line
   }
 
   state = {
@@ -35,7 +35,7 @@ export default class AddBoardModal extends PureComponent {
   componentDidUpdate(_, prevState) {
     const {state} = this
     if (prevState.boardName !== state.boardName) {
-      this.setState({validName: this.isBoardNameValid()})
+      this.setState({validName: this.isBoardNameValid()}) // eslint-disable-line
     }
   }
 
@@ -146,6 +146,7 @@ const BoardTitleInput = styled(Input)`
   font-size: 16px;
 
   &::placeholder {
+    color: rgba(255, 255, 255, 0.6);
     font-size: 16px;
   }
 
