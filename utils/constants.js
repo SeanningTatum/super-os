@@ -14,8 +14,8 @@ export const theme = {
   success: '#61BD4F',
   success_linear: 'linear-gradient(to bottom, #61BD4F 0, #5AAC44 100%)',
   success_box_shadow: '0 2px 0 #3F6F21',
-  background: 'rgba(247, 247, 247)',
-  contrast: 'rgba(255, 255, 255)',
+  background: 'rgb(247, 247, 247)',
+  contrast: 'rgb(255, 255, 255)',
   boxshadow: '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)',
 }
 

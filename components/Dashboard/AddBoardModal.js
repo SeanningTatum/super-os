@@ -6,13 +6,15 @@ import styled from 'styled-components'
 
 import {Modal, Card, Button, Input} from '../UI'
 import {colors} from '../../utils/constants'
+import {GET_BOARDS} from '../../pages/dashboard/boards'
 
 const CREATE_BOARD = gql`
-  mutation createBoard($user_id: ID!, $board_name: String!) {
-    createBoard(user_id: $user_id, board_name: $board_name) {
+  mutation createBoard($user_id: ID!, $board_name: String!, $background: String!) {
+    createBoard(user_id: $user_id, board_name: $board_name, background: $background) {
       id
       name
       owned_by
+      background
     }
   }
 `
@@ -20,6 +22,8 @@ const CREATE_BOARD = gql`
 export default class AddBoardModal extends PureComponent {
   static propTypes = {
     userID: PropTypes.string.isRequired,
+    open: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired,
   }
 
   state = {
@@ -39,12 +43,11 @@ export default class AddBoardModal extends PureComponent {
     const {props, state} = this
     const {boardName} = state
 
-    console.log(boardName, props.userID)
-
     createBoardMutation({
       variables: {
         board_name: boardName,
         user_id: props.userID,
+        background: state.backgroundColor,
       },
     })
   }
@@ -54,53 +57,85 @@ export default class AddBoardModal extends PureComponent {
     return state.boardName.length > 2
   }
 
+  successfulSubmit = () => {
+    const {props} = this
+    this.setState({boardName: ''})
+    props.closeModal()
+  }
+
   render() {
     const {props, state} = this
 
     return (
       <Modal open={props.open} closeModal={props.closeModal}>
-        <Mutation mutation={CREATE_BOARD} onCompleted={data => console.log('it is finished', data)}>
-          {(createBoard, {data, error}) => (
-            <Fragment>
-              <Container>
-                <AddBoardCard
-                  style={{
-                    backgroundColor: state.backgroundColor,
-                    border: `1px solid ${state.backgroundColor}`,
-                  }}
-                >
-                  <BoardTitleInput
-                    placeholder="Add board title"
-                    transparent
-                    value={state.boardName}
-                    onChange={e => this.setState({boardName: e.target.value})}
-                  />
-                </AddBoardCard>
-                <ColorPicker>
-                  {colors.map(color => (
-                    <Square
-                      key={color}
-                      style={{backgroundColor: color}}
-                      onClick={() => this.setState({backgroundColor: color})}
-                    />
-                  ))}
-                </ColorPicker>
-              </Container>
+        <Mutation
+          mutation={CREATE_BOARD}
+          update={(cache, {data: {createBoard}}) => {
+            // Query the GET_BOARDS function
+            const {User} = cache.readQuery({query: GET_BOARDS, variables: {user_id: props.userID}})
 
-              <div style={{width: '40%', marginTop: '12px'}}>
-                <AddBoardButton
-                  type="button"
-                  success
-                  disabled={!state.validName}
-                  small
-                  nomargin
-                  onClick={() => this.onCreateBoard(createBoard)}
-                >
-                  Create Board
-                </AddBoardButton>
-              </div>
-            </Fragment>
-          )}
+            // Update Boards
+            const tempUser = User
+            tempUser.boards = User.boards.concat([createBoard])
+
+            // Update cache by replacing boards with newly added board
+            cache.writeQuery({
+              query: GET_BOARDS,
+              data: {User: tempUser},
+            })
+          }}
+          onCompleted={this.successfulSubmit}
+        >
+          {(createBoard, {loading}) => {
+            if (loading) {
+              return (
+                <Card>
+                  <h5>Loading...</h5>
+                </Card>
+              )
+            }
+            return (
+              <Fragment>
+                <Container>
+                  <AddBoardCard
+                    style={{
+                      backgroundColor: state.backgroundColor,
+                      border: `1px solid ${state.backgroundColor}`,
+                    }}
+                  >
+                    <BoardTitleInput
+                      placeholder="Add board title"
+                      transparent
+                      value={state.boardName}
+                      onChange={e => this.setState({boardName: e.target.value})}
+                    />
+                  </AddBoardCard>
+                  <ColorPicker>
+                    {colors.map(color => (
+                      <Square
+                        key={color}
+                        style={{backgroundColor: color}}
+                        onClick={() => this.setState({backgroundColor: color})}
+                      />
+                    ))}
+                  </ColorPicker>
+                </Container>
+
+                <div style={{width: '40%', marginTop: '12px'}}>
+                  <AddBoardButton
+                    type="button"
+                    success
+                    disabled={!state.validName}
+                    small
+                    nomargin
+                    onClick={() => this.onCreateBoard(createBoard)}
+                  >
+                    Create Board
+                  </AddBoardButton>
+                </div>
+              </Fragment>
+            )
+          }}
         </Mutation>
       </Modal>
     )

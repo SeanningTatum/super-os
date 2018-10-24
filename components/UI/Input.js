@@ -6,6 +6,7 @@ export default styled.input`
   border: 1px solid rgb(215, 215, 215);
   font-size: 0.9rem;
   width: 100%;
+  background-color: rgb(243, 243, 243);
 
   &:focus {
     outline: none;
@@ -19,7 +20,7 @@ export default styled.input`
       color: rgba(255, 255, 255, 1);
       font-weight: 800;
       &::placeholder {
-        color: rgba(255, 255, 255, 0.6);
+        color: rgb (255, 255, 255, 0.6);
         font-weight: 800;
       }
       &:hover {
