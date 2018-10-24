@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Head from 'next/head'
 import styled from 'styled-components'
 
-import LoginForm from '../components/LoginForm'
+import LoginForm from '../components/Auth/LoginForm'
 import defaultPage from '../hocs/defaultPage'
 
 const index = () => (

@@ -4,7 +4,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 
 import defaultPage from '../hocs/defaultPage'
-import SignupForm from '../components/SignupForm'
+import SignupForm from '../components/Auth/SignupForm'
 
 const Signup = () => (
   <Fragment>

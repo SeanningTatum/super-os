@@ -2,10 +2,9 @@ import React, {Fragment} from 'react'
 import {Mutation, withApollo} from 'react-apollo'
 import gql from 'graphql-tag'
 
-import redirect from '../lib/redirect'
-import AuthService from '../utils/authService'
-
-import {Button, FormGroup, Input, Label, Alert} from './UI'
+import redirect from '../../lib/redirect'
+import AuthService from '../../utils/authService'
+import {Button, FormGroup, Input, Label, Alert} from '../UI'
 
 const SIGN_IN = gql`
   mutation login($email: String!, $password: String!) {
