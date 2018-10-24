@@ -51,8 +51,9 @@ class boards extends React.Component {
                 if (error) return <h5>Error</h5>
                 if (loading) return <h5>Loading...</h5>
 
-                const {boards} = data.User
+                const {boards} = data.User // eslint-disable-line
 
+                // User does not have any boards
                 if (boards.length === 0) {
                   return (
                     <NoBoardsContainer>
