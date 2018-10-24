@@ -35,7 +35,6 @@ const DashboardWrapper = styled.div`
 const MainContent = styled.div`
   flex: 1;
   max-height: 600px;
-  padding: 0.5rem 0;
 `
 
 export default dashboardLayout
