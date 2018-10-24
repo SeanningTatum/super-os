@@ -1,8 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Link from 'next/link'
 
-export default ({username}) => (
+const Sidenav = ({username}) => (
   <SideNav>
     <Header>
       <ProfilePic />
@@ -29,6 +30,12 @@ export default ({username}) => (
     </NavList>
   </SideNav>
 )
+
+Sidenav.propTypes = {
+  username: PropTypes.string.isRequired,
+}
+
+export default Sidenav
 
 const SideNav = styled.aside`
   flex: 0.2;

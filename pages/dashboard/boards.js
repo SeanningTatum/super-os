@@ -1,8 +1,10 @@
 import React, {Fragment} from 'react'
+import Head from 'next/head'
 import styled from 'styled-components'
 
 import securedPage from '../../hocs/securePage'
-import {Button, Card, Modal, Input, Label} from '../../components/UI'
+import {Button, Card} from '../../components/UI'
+import AddBoardModal from '../../components/Dashboard/AddBoardModal'
 
 class boards extends React.Component {
   state = {
@@ -17,6 +19,9 @@ class boards extends React.Component {
     const {state} = this
     return (
       <Fragment>
+        <Head>
+          <title>Boards</title>
+        </Head>
         <Card style={{height: '100%'}}>
           <Wrapper>
             <NoBoardsContainer>
@@ -29,12 +34,7 @@ class boards extends React.Component {
             </NoBoardsContainer>
           </Wrapper>
         </Card>
-        {/* Modal */}
-        <Modal open={state.showModal} closeModal={this.closeModal}>
-          <Card>
-            <Input placeholder="Add board title" />
-          </Card>
-        </Modal>
+        <AddBoardModal closeModal={this.closeModal} open={state.showModal} />
       </Fragment>
     )
   }

@@ -34,4 +34,12 @@ export default styled.button`
     css`
       margin: 0;
     `};
+
+  ${props =>
+    props.success &&
+    css`
+      background-image: ${props.theme.success_linear};
+      border-color: ${props.theme.success};
+      box-shadow: ${props.theme.success_box_shadow};
+    `};
 `

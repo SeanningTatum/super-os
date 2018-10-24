@@ -37,7 +37,7 @@ const Container = styled.div`
   align-items: flex-start;
 `
 const Content = styled.div`
-  width: 360px;
+  width: 400px;
   height: auto;
   margin-top: 80px;
   z-index: 110;
