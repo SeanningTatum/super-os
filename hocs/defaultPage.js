@@ -7,7 +7,7 @@ import {unsecuredPages} from '../utils/constants'
 import redirect from '../lib/redirect'
 import DefaultLayout from '../layout/defaultLayout'
 
-const App = styled.main`
+const App = styled.div`
   height: 100vh;
 `
 export default Page =>
