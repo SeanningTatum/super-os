@@ -116,7 +116,9 @@ export default class AddBoardModal extends PureComponent {
                         key={color}
                         style={{backgroundColor: color}}
                         onClick={() => this.setState({backgroundColor: color})}
-                      />
+                      >
+                        <Overlay />
+                      </Square>
                     ))}
                   </ColorPicker>
                 </Container>
@@ -186,6 +188,23 @@ const Square = styled.div`
   height: 28px;
   border-radius: 2px;
   margin-bottom: 8px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`
+
+const Overlay = styled.div`
+  background: rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  transition: 0.3s ease-in;
+
+  &:hover {
+    opacity: 1;
+  }
 `
 
 const AddBoardCard = styled(Card)`
