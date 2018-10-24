@@ -1,25 +1,21 @@
-import React, {Fragment} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
-import securePage from '../hocs/securePage'
 import Header from '../components/Header'
 import Sidenav from '../components/Dashboard/Sidenav'
 
-const dashboard = ({loggedUser}) => (
+const dashboardLayout = ({children, loggedUser}) => (
   <FullPage>
     <div>
       <Header />
     </div>
     <DashboardWrapper>
       <Sidenav username={loggedUser.username} />
-      <MainContent>
-        <h5>Active Todos</h5>
-      </MainContent>
+      <MainContent>{children}</MainContent>
     </DashboardWrapper>
   </FullPage>
 )
 
-// Styles
 const FullPage = styled.section`
   height: 100%;
   display: flex;
@@ -42,4 +38,4 @@ const MainContent = styled.div`
   padding: 0.5rem 0;
 `
 
-export default securePage(dashboard)
+export default dashboardLayout

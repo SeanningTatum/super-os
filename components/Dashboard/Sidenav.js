@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Link from 'next/link'
 
 export default ({username}) => (
   <SideNav>
@@ -12,14 +13,19 @@ export default ({username}) => (
     </Header>
 
     <NavList>
-      <NavItem>
-        <NavIcon />
-        <p>Overview</p>
-      </NavItem>
-      <NavItem>
-        <NavIcon />
-        <p>Boards</p>
-      </NavItem>
+      <Link href="/">
+        <NavItem>
+          <NavIcon />
+          <p>Overview</p>
+        </NavItem>
+      </Link>
+
+      <Link href="/dashboard/boards">
+        <NavItem>
+          <NavIcon />
+          <p>Boards</p>
+        </NavItem>
+      </Link>
     </NavList>
   </SideNav>
 )
@@ -31,6 +37,7 @@ const SideNav = styled.aside`
   max-height: 600px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-radius: 3px;
 `
 
 const Header = styled.div`
@@ -52,6 +59,7 @@ const NavItem = styled.li`
   padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
+  cursor: pointer;
 `
 
 const NavIcon = styled.div`

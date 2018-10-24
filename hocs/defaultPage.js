@@ -6,10 +6,8 @@ import AuthService from '../utils/authService'
 import {unsecuredPages} from '../utils/constants'
 import redirect from '../lib/redirect'
 import DefaultLayout from '../layout/defaultLayout'
+import DashboardLayout from '../layout/dashboardLayout'
 
-const App = styled.div`
-  height: 100vh;
-`
 export default Page =>
   class DefaultPage extends React.Component {
     static getInitialProps(ctx) {
@@ -23,10 +21,7 @@ export default Page =>
       // If user is authenticated and is the unsecuredPagesArray
       // redirect user to somewhere useful.
       if (isAuthenticated && unsecuredPages.includes(ctx.pathname)) {
-        redirect(ctx, '/')
-        return {
-          ...pageProps,
-        }
+        redirect(ctx, '/dashboard')
       }
 
       return {
@@ -54,13 +49,14 @@ export default Page =>
 
     render() {
       const {props} = this
+      const {loggedUser} = props
 
       return (
         <App>
           {props.isAuthenticated ? (
-            <React.Fragment>
+            <DashboardLayout loggedUser={loggedUser}>
               <Page {...props} />
-            </React.Fragment>
+            </DashboardLayout>
           ) : (
             <DefaultLayout>
               <Page {...props} />
@@ -70,3 +66,7 @@ export default Page =>
       )
     }
   }
+
+const App = styled.div`
+  height: 100vh;
+`
