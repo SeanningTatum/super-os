@@ -16,14 +16,6 @@ export default styled.button`
   border: ${props => `1px solid ${props.theme.primary}`};
 
   ${props =>
-    props.disabled &&
-    css`
-      background: grey;
-      border: 1px solid grey;
-      box-shadow: 0 2.5px darkgrey;
-    `};
-
-  ${props =>
     props.small &&
     css`
       padding: 0.5rem 1.2rem;
@@ -41,5 +33,13 @@ export default styled.button`
       background-image: ${props.theme.success_linear};
       border-color: ${props.theme.success};
       box-shadow: ${props.theme.success_box_shadow};
+    `};
+
+  ${props =>
+    props.disabled &&
+    css`
+      background: grey;
+      border: 1px solid grey;
+      box-shadow: 0 2.5px darkgrey;
     `};
 `

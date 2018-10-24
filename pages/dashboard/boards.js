@@ -16,7 +16,8 @@ class boards extends React.Component {
   openModal = () => this.setState({showModal: true})
 
   render() {
-    const {state} = this
+    const {state, props} = this
+
     return (
       <Fragment>
         <Head>
@@ -34,7 +35,11 @@ class boards extends React.Component {
             </NoBoardsContainer>
           </Wrapper>
         </Card>
-        <AddBoardModal closeModal={this.closeModal} open={state.showModal} />
+        <AddBoardModal
+          closeModal={this.closeModal}
+          open={state.showModal}
+          userID={props.loggedUser.id}
+        />
       </Fragment>
     )
   }
