@@ -2,7 +2,9 @@ import React from 'react'
 import Head from 'next/head'
 import App, {Container} from 'next/app'
 import {ApolloProvider} from 'react-apollo'
+import {ThemeProvider} from 'styled-components'
 
+import {theme} from '../utils/constants'
 import withApollo from '../lib/withApollo'
 
 class MyApp extends App {
@@ -51,7 +53,9 @@ class MyApp extends App {
         </Head>
 
         <ApolloProvider client={apolloClient}>
-          <Component {...pageProps} />
+          <ThemeProvider theme={theme}>
+            <Component {...pageProps} />
+          </ThemeProvider>
         </ApolloProvider>
       </Container>
     )
