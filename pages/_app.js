@@ -3,9 +3,14 @@ import Head from 'next/head'
 import App, {Container} from 'next/app'
 import {ApolloProvider} from 'react-apollo'
 import {ThemeProvider} from 'styled-components'
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {faColumns, faHome} from '@fortawesome/free-solid-svg-icons'
 
-import {theme} from '../utils/constants'
 import withApollo from '../lib/withApollo'
+import {theme} from '../utils/constants'
+
+library.add(faColumns)
+library.add(faHome)
 
 class MyApp extends App {
   static async getInitialProps({Component, router, ctx}) {

@@ -2,11 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Link from 'next/link'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+
+const tempImage =
+  'https://scontent.fceb2-1.fna.fbcdn.net/v/t1.0-9/44703453_10215143626916678_2683641750047686656_o.jpg?_nc_cat=110&_nc_ht=scontent.fceb2-1.fna&oh=5baefebf31991962b11b20fcdf77aeb6&oe=5C87AA64'
 
 const Sidenav = ({username}) => (
   <SideNav>
     <Header>
-      <ProfilePic />
+      <ProfilePic src={tempImage} />
       <div>
         <Username>{username}</Username>
         <Type>Programmer</Type>
@@ -14,16 +18,21 @@ const Sidenav = ({username}) => (
     </Header>
 
     <NavList>
-      <Link href="/">
+      <Link href="/dashboard">
         <NavItem>
-          <NavIcon />
+          <NavIcon>
+            <FontAwesomeIcon icon="home" style={{width: '100%', height: '100%'}} />
+          </NavIcon>
+
           <p>Overview</p>
         </NavItem>
       </Link>
 
       <Link href="/dashboard/boards">
         <NavItem>
-          <NavIcon />
+          <NavIcon>
+            <FontAwesomeIcon icon="columns" style={{width: '100%', height: '100%'}} />
+          </NavIcon>
           <p>Boards</p>
         </NavItem>
       </Link>
@@ -73,11 +82,10 @@ const NavIcon = styled.div`
   height: 20px;
   width: 20px;
   border-radius: 2px;
-  border: 1px solid black;
   margin-right: 1rem;
 `
 
-const ProfilePic = styled.div`
+const ProfilePic = styled.img`
   border-radius: 2px;
   width: 30px;
   height: 30px;
