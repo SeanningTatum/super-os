@@ -1,6 +1,5 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import {Mutation, withApollo} from 'react-apollo'
-import styled from 'styled-components'
 import gql from 'graphql-tag'
 
 import redirect from '../lib/redirect'
@@ -19,7 +18,7 @@ const LoginForm = ({client}) => {
   let password
 
   return (
-    <LoginContainer>
+    <Fragment>
       <Mutation
         mutation={SIGN_IN}
         onCompleted={data => {
@@ -58,6 +57,7 @@ const LoginForm = ({client}) => {
               <Input
                 type="email"
                 required
+                placeholder="e.g. johndoe@apple.com"
                 ref={node => {
                   email = node
                 }}
@@ -69,6 +69,7 @@ const LoginForm = ({client}) => {
               <Input
                 type="password"
                 required
+                placeholder="e.g. "
                 ref={node => {
                   password = node
                 }}
@@ -79,13 +80,8 @@ const LoginForm = ({client}) => {
           </form>
         )}
       </Mutation>
-    </LoginContainer>
+    </Fragment>
   )
 }
-
-const LoginContainer = styled.div`
-  max-width: 430px;
-  margin: 0 auto;
-`
 
 export default withApollo(LoginForm)

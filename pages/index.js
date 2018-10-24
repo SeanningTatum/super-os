@@ -13,16 +13,15 @@ const index = () => (
     </Head>
     <FullPage>
       <SectionWrapper>
-        <HeadingText>Welcome back to Super OS</HeadingText>
-        <br />
-        <h1>Login in to Super OS</h1>
-        <br />
-        <h5>
-          or{' '}
-          <Link href="/signup" prefetch>
-            <a>create an account</a>
-          </Link>
-        </h5>
+        <HeadingContainer>
+          <HeadingText>Login to Super OS</HeadingText>
+          <HeadingSubtitle>
+            or{' '}
+            <Link href="/signup" prefetch>
+              <a>create an account</a>
+            </Link>
+          </HeadingSubtitle>
+        </HeadingContainer>
 
         <LoginForm />
       </SectionWrapper>
@@ -39,14 +38,25 @@ const FullPage = styled.section`
 `
 
 const SectionWrapper = styled.div`
-  max-width: 1200px;
+  max-width: 430px;
   padding-top: 5vh;
   margin: 0 auto;
 `
 
 const HeadingText = styled.h1`
-  font-size: 2rem;
+  font-size: 2.15rem;
   font-weight: 700;
+  margin-bottom: 0.5rem;
+`
+
+const HeadingContainer = styled.div`
+  text-align: left;
+  margin-bottom: 1.5rem;
+`
+
+const HeadingSubtitle = styled.h3`
+  font-size: 18px;
+  font-weight: 400;
 `
 
 const Jumbotron = styled.div`

@@ -65,60 +65,64 @@ class SignupForm extends Component {
           })
         }}
       >
-        {(register, {data, error}) => (
-          <form
-            onSubmit={e => {
-              e.preventDefault()
-              e.stopPropagation()
+        {(register, {data, error, loading}) => {
+          if (loading) return <h5>Loading...</h5>
 
-              register({
-                variables: {
-                  email: state.form.email,
-                  username: state.form.username,
-                  password: state.form.password,
-                },
-              })
-            }}
-          >
-            {error && error.graphQLErrors.map(({message}) => <Alert danger>{message}</Alert>)}
-            <FormGroup>
-              <Label htmlFor="username">Username</Label>
-              <Input
-                type="text"
-                required
-                value={state.username}
-                onChange={e => this.onInputChangedHandler('username', e.target.value)}
-                placeholder="e.g., Sean Urgel"
-              />
-            </FormGroup>
+          return (
+            <form
+              onSubmit={e => {
+                e.preventDefault()
+                e.stopPropagation()
 
-            <FormGroup>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                type="email"
-                required
-                value={state.email}
-                onChange={e => this.onInputChangedHandler('email', e.target.value)}
-                placeholder="e.g., urgel@company.com"
-              />
-            </FormGroup>
+                register({
+                  variables: {
+                    email: state.form.email,
+                    username: state.form.username,
+                    password: state.form.password,
+                  },
+                })
+              }}
+            >
+              {error && error.graphQLErrors.map(({message}) => <Alert danger>{message}</Alert>)}
+              <FormGroup>
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  type="text"
+                  required
+                  value={state.username}
+                  onChange={e => this.onInputChangedHandler('username', e.target.value)}
+                  placeholder="e.g., Sean Urgel"
+                />
+              </FormGroup>
 
-            <FormGroup>
-              <Label htmlFor="password">Password</Label>
-              <Input
-                type="password"
-                required
-                value={state.password}
-                onChange={e => this.onInputChangedHandler('password', e.target.value)}
-                placeholder="e.g., "
-              />
-            </FormGroup>
+              <FormGroup>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  type="email"
+                  required
+                  value={state.email}
+                  onChange={e => this.onInputChangedHandler('email', e.target.value)}
+                  placeholder="e.g., urgel@company.com"
+                />
+              </FormGroup>
 
-            <Button type="submit" disabled={!state.allowSubmit}>
-              Create New Account
-            </Button>
-          </form>
-        )}
+              <FormGroup>
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  type="password"
+                  required
+                  value={state.password}
+                  onChange={e => this.onInputChangedHandler('password', e.target.value)}
+                  placeholder="e.g., "
+                />
+              </FormGroup>
+
+              <Button type="submit" disabled={!state.allowSubmit}>
+                Create New Account
+              </Button>
+            </form>
+          )
+        }}
       </Mutation>
     )
   }
