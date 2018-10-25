@@ -24,7 +24,7 @@ const Sidenav = ({username}) => (
             <FontAwesomeIcon icon="home" style={{width: '100%', height: '100%'}} />
           </NavIcon>
 
-          <p>Overview</p>
+          <LinkName>Overview</LinkName>
         </NavItem>
       </Link>
 
@@ -33,7 +33,7 @@ const Sidenav = ({username}) => (
           <NavIcon>
             <FontAwesomeIcon icon="columns" style={{width: '100%', height: '100%'}} />
           </NavIcon>
-          <p>Boards</p>
+          <LinkName>Boards</LinkName>
         </NavItem>
       </Link>
     </NavList>
@@ -45,6 +45,10 @@ Sidenav.propTypes = {
 }
 
 export default Sidenav
+
+const LinkName = styled.p`
+  margin-top: 0;
+`
 
 const SideNav = styled.aside`
   flex: 0.2;
