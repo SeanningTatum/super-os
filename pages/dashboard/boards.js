@@ -45,7 +45,7 @@ class boards extends React.Component {
         <Head>
           <title>Boards</title>
         </Head>
-        <Card>
+        <Card style={{height: '100%'}}>
           <Wrapper>
             <Query query={GET_BOARDS} variables={{user_id: props.loggedUser.id}}>
               {({data, error, loading}) => {
