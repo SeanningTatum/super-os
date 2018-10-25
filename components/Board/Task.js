@@ -27,14 +27,13 @@ class Task extends Component {
     const {task, index} = this.props
 
     return (
-      <Draggable draggableId={task.id} index={index} isDragDisabled={task.id === 'task-1'}>
+      <Draggable draggableId={task.id} index={index}>
         {(provided, snapshot) => (
           <Container
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
             isDragging={snapshot.isDragging}
-            isDragDisabled={task.id === 'task-1'}
           >
             {/* <Handle {...provided.dragHandleProps} /> */}
             {task.content}

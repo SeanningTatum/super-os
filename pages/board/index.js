@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {DragDropContext} from 'react-beautiful-dnd'
+import {DragDropContext, Droppable} from 'react-beautiful-dnd'
 import styled from 'styled-components'
 // import PropTypes from 'prop-types'
 // import Head from 'next/head'
@@ -11,7 +11,7 @@ class Board extends Component {
   state = initialData
 
   onDragEnd = result => {
-    const {destination, source, draggableId} = result
+    const {destination, source, draggableId, type} = result
     const {state} = this
 
     // User did not put Draggable into a Droppable
@@ -19,6 +19,19 @@ class Board extends Component {
 
     // If User just put the Draggable in the same place
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
+
+    if (type === 'column') {
+      const newColumnOrder = [...state.columnOrder]
+      newColumnOrder.splice(source.index, 1)
+      newColumnOrder.splice(destination.index, 0, draggableId)
+
+      const newState = {
+        ...state,
+        columnOrder: newColumnOrder,
+      }
+      this.setState(newState)
+      return
+    }
 
     // Fetch the column
     const start = state.columns[source.droppableId]
@@ -88,20 +101,21 @@ class Board extends Component {
     const {state} = this
 
     return (
-      <Container>
-        <DragDropContext
-          onDragEnd={this.onDragEnd}
-          onDragStart={this.onDragStart}
-          onDragUpdate={this.onDragUpdate}
-        >
-          {state.columnOrder.map(columnID => {
-            const column = state.columns[columnID]
-            const tasks = column.taskIds.map(taskID => state.tasks[taskID])
+      <DragDropContext onDragEnd={this.onDragEnd}>
+        <Droppable droppableId="all-columns" direction="horizontal" type="column">
+          {provided => (
+            <Container ref={provided.innerRef} {...provided.droppableProps}>
+              {state.columnOrder.map((columnID, index) => {
+                const column = state.columns[columnID]
+                const tasks = column.taskIds.map(taskID => state.tasks[taskID])
 
-            return <Column key={columnID} column={column} tasks={tasks} />
-          })}
-        </DragDropContext>
-      </Container>
+                return <Column key={columnID} column={column} tasks={tasks} index={index} />
+              })}
+              {provided.placeholder}
+            </Container>
+          )}
+        </Droppable>
+      </DragDropContext>
     )
   }
 }
