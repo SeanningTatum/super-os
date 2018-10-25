@@ -87,8 +87,8 @@ class boards extends React.Component {
                     </div>
                     <BoardsContainer>
                       {boards.map(board => (
-                        <Link href={`/board?id=${board.id}`} as={`/b/${board.id}`}>
-                          <BoardCard style={{backgroundColor: board.background}} key={board.id}>
+                        <Link href={`/board?id=${board.id}`} as={`/b/${board.id}`} key={board.id}>
+                          <BoardCard style={{backgroundColor: board.background}}>
                             <p>{board.name}</p>
                           </BoardCard>
                         </Link>

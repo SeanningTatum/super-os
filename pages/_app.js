@@ -48,7 +48,7 @@ class MyApp extends App {
               }
 
               input {
-                background-color: rgb(243, 243, 243);
+                background-color: rgb(255, 255, 255);
               }
 
               a {
