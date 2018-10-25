@@ -6,7 +6,7 @@ export default styled.input`
   border: 1px solid rgb(215, 215, 215);
   font-size: 0.9rem;
   width: 100%;
-  background-color: rgb(243, 243, 243);
+  background-color: rgb(255, 255, 255);
 
   &:focus {
     outline: none;

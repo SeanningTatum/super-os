@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
+import Link from 'next/link'
 import styled from 'styled-components'
 import {Query} from 'react-apollo'
 import gql from 'graphql-tag'
@@ -44,7 +45,7 @@ class boards extends React.Component {
         <Head>
           <title>Boards</title>
         </Head>
-        <Card style={{height: '100%'}}>
+        <Card>
           <Wrapper>
             <Query query={GET_BOARDS} variables={{user_id: props.loggedUser.id}}>
               {({data, error, loading}) => {
@@ -66,7 +67,7 @@ class boards extends React.Component {
                     </NoBoardsContainer>
                   )
                 }
-
+                // Boards
                 return (
                   <Fragment>
                     <div
@@ -78,18 +79,24 @@ class boards extends React.Component {
                       }}
                     >
                       <h3>Your Boards</h3>
-                      <div>
+                      {/* <div>
                         <Button small onClick={this.openModal} nomargin>
                           Create Board
                         </Button>
-                      </div>
+                      </div> */}
                     </div>
                     <BoardsContainer>
                       {boards.map(board => (
-                        <BoardCard style={{backgroundColor: board.background}} key={board.id}>
-                          <p>{board.name}</p>
-                        </BoardCard>
+                        <Link href={`/board?id=${board.id}`} as={`/b/${board.id}`} key={board.id}>
+                          <BoardCard style={{backgroundColor: board.background}}>
+                            <p>{board.name}</p>
+                          </BoardCard>
+                        </Link>
                       ))}
+
+                      <AddBoardCard onClick={this.openModal}>
+                        <p>Create new Board</p>
+                      </AddBoardCard>
                     </BoardsContainer>
                   </Fragment>
                 )
@@ -97,6 +104,7 @@ class boards extends React.Component {
             </Query>
           </Wrapper>
         </Card>
+        {/* Modal */}
         <AddBoardModal
           closeModal={this.closeModal}
           open={state.showModal}
@@ -127,13 +135,25 @@ const BoardCard = styled(Card)`
   width: 160px;
   height: 80px;
   margin-right: 20px;
+  margin-bottom: 16px;
   font-size: 12px;
   font-weight: 700;
   color: white;
+  cursor: pointer;
+`
+
+const AddBoardCard = styled(BoardCard)`
+  background-color: rgba(9, 45, 66, 0.08);
+  color: #6b808c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 `
 
 const BoardsContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `
 
 export default securedPage(boards)

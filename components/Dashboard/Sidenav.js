@@ -18,7 +18,7 @@ const Sidenav = ({username}) => (
     </Header>
 
     <NavList>
-      <Link href="/dashboard">
+      <Link href="/dashboard" prefetch>
         <NavItem>
           <NavIcon>
             <FontAwesomeIcon icon="home" style={{width: '100%', height: '100%'}} />
@@ -28,7 +28,7 @@ const Sidenav = ({username}) => (
         </NavItem>
       </Link>
 
-      <Link href="/dashboard/boards">
+      <Link href="/dashboard/boards" prefetch>
         <NavItem>
           <NavIcon>
             <FontAwesomeIcon icon="columns" style={{width: '100%', height: '100%'}} />
