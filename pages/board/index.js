@@ -1,14 +1,16 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {DragDropContext, Droppable} from 'react-beautiful-dnd'
 import styled from 'styled-components'
-// import PropTypes from 'prop-types'
-// import Head from 'next/head'
+import Head from 'next/head'
 
 import initialData from '../../utils/initData'
-import Column from '../../components/Board/Column'
+import ColumnInnerList from '../../components/Board/ColumnInnerList'
 
 class Board extends Component {
-  state = initialData
+  state = {
+    ...initialData,
+    pageTitle: 'Practice Board',
+  }
 
   onDragEnd = result => {
     const {destination, source, draggableId, type} = result
@@ -93,29 +95,36 @@ class Board extends Component {
     this.setState(newState)
   }
 
-  onDragStart = start => {}
-
-  onDragUpdate = update => {}
-
   render() {
     const {state} = this
 
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        <Droppable droppableId="all-columns" direction="horizontal" type="column">
-          {provided => (
-            <Container ref={provided.innerRef} {...provided.droppableProps}>
-              {state.columnOrder.map((columnID, index) => {
-                const column = state.columns[columnID]
-                const tasks = column.taskIds.map(taskID => state.tasks[taskID])
+      <Fragment>
+        <Head>
+          <title>{state.pageTitle}</title>
+        </Head>
 
-                return <Column key={columnID} column={column} tasks={tasks} index={index} />
-              })}
-              {provided.placeholder}
-            </Container>
-          )}
-        </Droppable>
-      </DragDropContext>
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          <Droppable droppableId="all-columns" direction="horizontal" type="column">
+            {provided => (
+              <Container ref={provided.innerRef} {...provided.droppableProps}>
+                {state.columnOrder.map((columnID, index) => {
+                  const column = state.columns[columnID]
+                  return (
+                    <ColumnInnerList
+                      key={column.id}
+                      column={column}
+                      taskMap={state.tasks}
+                      index={index}
+                    />
+                  )
+                })}
+                {provided.placeholder}
+              </Container>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </Fragment>
     )
   }
 }

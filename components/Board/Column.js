@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {Droppable, Draggable} from 'react-beautiful-dnd'
 
@@ -46,6 +47,7 @@ class Column extends React.Component {
                   <InnerList tasks={tasks} />
 
                   {provided.placeholder}
+                  <h5>Add Another Card</h5>
                 </TaskList>
               )}
             </Droppable>
@@ -54,6 +56,21 @@ class Column extends React.Component {
       </Draggable>
     )
   }
+}
+
+Column.propTypes = {
+  column: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    taskIds: PropTypes.arrayOf(PropTypes.number),
+  }),
+  tasks: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+    })
+  ),
+  index: PropTypes.any.isRequired, // eslint-disable-line
 }
 
 export default Column
