@@ -1,6 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import App, {Container} from 'next/app'
+import '@atlaskit/css-reset'
 import {ApolloProvider} from 'react-apollo'
 import {ThemeProvider} from 'styled-components'
 import {library} from '@fortawesome/fontawesome-svg-core'
@@ -26,7 +27,7 @@ class MyApp extends App {
   render() {
     const {Component, pageProps, apolloClient} = this.props
     const cssFiles = [
-      'https://unpkg.com/normalize.css@5.0.0/normalize.css',
+      // 'https://unpkg.com/normalize.css@5.0.0/normalize.css',
       'https://fonts.googleapis.com/css?family=Open+Sans:400,700,800',
     ]
     return (
@@ -38,7 +39,6 @@ class MyApp extends App {
           ))}
           <style>{`
               * {
-                margin: 0;
                 font-family: 'Open Sans', sans-serif;
                 box-sizing: border-box;
               }
