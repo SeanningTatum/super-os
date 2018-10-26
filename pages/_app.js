@@ -4,7 +4,6 @@ import App, {Container} from 'next/app'
 import '@atlaskit/css-reset'
 import {ApolloProvider} from 'react-apollo'
 import {ThemeProvider} from 'styled-components'
-//
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {faColumns, faHome} from '@fortawesome/free-solid-svg-icons'
 
@@ -35,7 +34,7 @@ class MyApp extends App {
           {cssFiles.map((c, i) => (
             <link key={i} href={c} rel="stylesheet" />
           ))}
-          <style global>{`
+          <style global="true">{`
               * {
                 font-family: 'Open Sans', sans-serif;
                 box-sizing: border-box;
@@ -43,6 +42,7 @@ class MyApp extends App {
 
               body {
                 background-color: rgb(246, 246, 246);
+                overflow: hidden;
               }
 
             `}</style>

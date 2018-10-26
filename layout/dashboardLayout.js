@@ -4,17 +4,24 @@ import styled from 'styled-components'
 import Header from '../components/Header'
 import Sidenav from '../components/Dashboard/Sidenav'
 
-const dashboardLayout = ({children, loggedUser}) => (
-  <FullPage>
-    <div>
-      <Header />
-    </div>
-    <DashboardWrapper>
-      <Sidenav username={loggedUser.username} />
-      <MainContent>{children}</MainContent>
-    </DashboardWrapper>
-  </FullPage>
-)
+const dashboardLayout = ({children, loggedUser, inBoardPage}) => {
+  console.log(inBoardPage)
+  return (
+    <FullPage>
+      <div>
+        <Header inBoardPage={inBoardPage} />
+      </div>
+      {inBoardPage ? (
+        children
+      ) : (
+        <DashboardWrapper>
+          <Sidenav username={loggedUser.username} />
+          <MainContent>{children}</MainContent>
+        </DashboardWrapper>
+      )}
+    </FullPage>
+  )
+}
 
 const FullPage = styled.section`
   height: 100%;

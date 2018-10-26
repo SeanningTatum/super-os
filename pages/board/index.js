@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react'
+import {Component, Fragment} from 'react'
 import {DragDropContext, Droppable} from 'react-beautiful-dnd'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -8,7 +8,7 @@ import gql from 'graphql-tag'
 
 import initialData from '../../utils/initData'
 import ColumnInnerList from '../../components/Board/ColumnInnerList'
-import SecurePageNoLayout from '../../hocs/securePageNoLayout'
+import securePage from '../../hocs/securePage'
 
 const GET_BOARD = gql`
   query($board_id: ID!) {
@@ -152,7 +152,7 @@ class Board extends Component {
                 </Droppable>
               </DragDropContext>
 
-              <style global>{`
+              <style global="true">{`
                 body {
                   background-color: ${Board.background};
                 }
@@ -169,4 +169,4 @@ const Container = styled.div`
   display: flex;
 `
 
-export default SecurePageNoLayout(Board)
+export default securePage(Board)

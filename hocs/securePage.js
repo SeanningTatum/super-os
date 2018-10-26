@@ -7,8 +7,11 @@ import defaultPage from './defaultPage'
 
 const securePageHoc = Page =>
   class SecurePage extends React.Component {
-    static getInitialProps(ctx) {
-      return Page.getInitialProps && Page.getInitialProps(ctx)
+    static getInitialProps({pathname, ...ctx}) {
+      const pageProps = Page.getInitialProps && Page.getInitialProps(ctx)
+
+      console.log('pathname', pathname)
+      return {...pageProps, pathname}
     }
 
     static propTypes = {
@@ -28,7 +31,7 @@ const securePageHoc = Page =>
       }
 
       return (
-        <DashBoardLayout loggedUser={props.loggedUser}>
+        <DashBoardLayout loggedUser={props.loggedUser} inBoardPage={props.pathname === '/board'}>
           <Page {...props} />
         </DashBoardLayout>
       )

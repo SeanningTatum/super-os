@@ -1,1 +1,3 @@
 extends: kensho
+rules:
+  react/react-in-jsx-scope: off
