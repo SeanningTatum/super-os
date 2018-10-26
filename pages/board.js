@@ -6,9 +6,9 @@ import Head from 'next/head'
 import {Query} from 'react-apollo'
 import gql from 'graphql-tag'
 
-import initialData from '../../utils/initData'
-import ColumnInnerList from '../../components/Board/ColumnInnerList'
-import securePage from '../../hocs/securePage'
+import initialData from '../utils/initData'
+import ColumnInnerList from '../components/Board/ColumnInnerList'
+import securePage from '../hocs/securePage'
 
 const GET_BOARD = gql`
   query($board_id: ID!) {

@@ -1,33 +1,25 @@
-import {Fragment} from 'react'
 import Link from 'next/link'
-import Head from 'next/head'
 import styled from 'styled-components'
 
 import LoginForm from '../components/Auth/LoginForm'
 import defaultPage from '../hocs/defaultPage'
 
 const index = () => (
-  <Fragment>
-    <Head>
-      <title>Super OS</title>
-    </Head>
-    <FullPage>
-      <SectionWrapper>
-        <HeadingContainer>
-          <HeadingText>Login to Super OS</HeadingText>
-          <HeadingSubtitle>
-            or{' '}
-            <Link href="/signup" prefetch>
-              <a>create an account</a>
-            </Link>
-          </HeadingSubtitle>
-        </HeadingContainer>
+  <FullPage>
+    <SectionWrapper>
+      <HeadingContainer>
+        <HeadingText>Login to Super OS</HeadingText>
+        <HeadingSubtitle>
+          or{' '}
+          <Link href="/signup" prefetch>
+            <a>create an account</a>
+          </Link>
+        </HeadingSubtitle>
+      </HeadingContainer>
 
-        <LoginForm />
-      </SectionWrapper>
-    </FullPage>
-    <Jumbotron />
-  </Fragment>
+      <LoginForm />
+    </SectionWrapper>
+  </FullPage>
 )
 
 // Styles
