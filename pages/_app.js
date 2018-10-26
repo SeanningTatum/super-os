@@ -26,10 +26,7 @@ class MyApp extends App {
 
   render() {
     const {Component, pageProps, apolloClient} = this.props
-    const cssFiles = [
-      // 'https://unpkg.com/normalize.css@5.0.0/normalize.css',
-      'https://fonts.googleapis.com/css?family=Open+Sans:400,700,800',
-    ]
+    const cssFiles = ['https://fonts.googleapis.com/css?family=Open+Sans:400,700,800']
     return (
       <Container>
         <Head>
@@ -47,13 +44,6 @@ class MyApp extends App {
                 background-color: rgb(246, 246, 246);
               }
 
-              input {
-                background-color: rgb(255, 255, 255);
-              }
-
-              a {
-                cursor: pointer;
-              }
             `}</style>
         </Head>
 

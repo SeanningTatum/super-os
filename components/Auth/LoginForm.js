@@ -25,11 +25,11 @@ const LoginForm = ({client}) => {
 
           // Store the token in cookie
           AuthService.setToken(accessToken)
+          redirect({}, '/dashboard')
 
           // Force a reload of all the current queries now that the user is
           // logged in
           client.cache.reset()
-          redirect({}, '/dashboard')
         }}
       >
         {(signin, {data, error}) => (

@@ -27,7 +27,6 @@ const securePageHoc = Page =>
         return <h5>Not Authorized</h5>
       }
 
-      console.log(props.loggedUser)
       return (
         <DashBoardLayout loggedUser={props.loggedUser}>
           <Page {...props} />
