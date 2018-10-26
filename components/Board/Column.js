@@ -4,26 +4,6 @@ import {Droppable, Draggable} from 'react-beautiful-dnd'
 
 import InnerList from './InnerList'
 
-const Container = styled.div`
-  margin: 8px;
-  width: 250px;
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-  background-color: grey;
-
-  display: flex;
-  flex-direction: column;
-`
-const Title = styled.h3`
-  padding: 8px;
-`
-const TaskList = styled.div`
-  padding: 8px;
-  background-color: ${props => (props.isDraggingOver ? 'lightgrey' : 'white')};
-  flex-grow: 1;
-  min-height: 100px;
-`
-
 const Column = ({column, index, tasks}) => (
   <Draggable draggableId={column.id} index={index}>
     {provided => (
@@ -41,10 +21,12 @@ const Column = ({column, index, tasks}) => (
               <InnerList tasks={tasks} />
 
               {provided.placeholder}
-              <h5>Add Another Card</h5>
             </TaskList>
           )}
         </Droppable>
+        <Footer>
+          <span>Add another card</span>
+        </Footer>
       </Container>
     )}
   </Draggable>
@@ -64,5 +46,37 @@ Column.propTypes = {
   ),
   index: PropTypes.any.isRequired, // eslint-disable-line
 }
+
+const Container = styled.div`
+  margin: 8px;
+  width: 250px;
+  border: 1px solid lightgrey;
+  border-radius: 4px;
+  background-color: #dfe3e6;
+
+  display: flex;
+  flex-direction: column;
+`
+const Title = styled.h3`
+  padding: 12px 10px 8px;
+  font-weight: 700;
+  font-size: 14px;
+`
+const TaskList = styled.div`
+  padding: 8px;
+  background-color: ${props => (props.isDraggingOver ? 'lightgrey' : '#dfe3e6')};
+  flex-grow: 1;
+  min-height: 30px;
+`
+
+const Footer = styled.div`
+  padding: 10px 15px 8px;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
 
 export default Column

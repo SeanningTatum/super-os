@@ -167,6 +167,7 @@ class Board extends Component {
 
 const Container = styled.div`
   display: flex;
+  align-items: flex-start;
 `
 
 export default securePage(Board)

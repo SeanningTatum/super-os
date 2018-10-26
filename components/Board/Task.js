@@ -7,11 +7,17 @@ const Container = styled.div`
   border: 1px solid lightgrey;
   padding: 8px;
   margin-bottom: 8px;
-  border-radius: 2px;
-  background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
-  background-color: ${props => (props.isDragDisabled ? 'grey' : 'white')};
+  border: none;
+  border-radius: 4px;
+  background-color: white;
+  /* background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')}; */
+  /* background-color: ${props => (props.isDragDisabled ? 'grey' : 'white')}; */
   display: flex;
   cursor: grab;
+
+  &:hover {
+    background-color: #f5f6f7;
+  }
 `
 
 // const Handle = styled.div`

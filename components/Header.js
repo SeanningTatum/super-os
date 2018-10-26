@@ -32,7 +32,7 @@ Header.propTypes = {
 }
 
 const HeaderWrapper = styled.header`
-  background-color: ${props => (props.inBoardPage ? 'transparent' : '#fff')};
+  background-color: ${props => (props.inBoardPage ? 'rgba(0,0,0, 0.2)' : '#fff')};
   position: sticky;
   height: 50px;
   padding: 0 5rem;
