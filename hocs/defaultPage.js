@@ -1,12 +1,11 @@
 import React from 'react'
 import Router from 'next/router'
 import styled from 'styled-components'
+import Head from 'next/head'
 
 import AuthService from '../utils/authService'
 import {unsecuredPages} from '../utils/constants'
 import redirect from '../lib/redirect'
-import DefaultLayout from '../layout/defaultLayout'
-import DashboardLayout from '../layout/dashboardLayout'
 
 export default Page =>
   class DefaultPage extends React.Component {
@@ -49,19 +48,13 @@ export default Page =>
 
     render() {
       const {props} = this
-      const {loggedUser} = props
 
       return (
         <App>
-          {props.isAuthenticated ? (
-            <DashboardLayout loggedUser={loggedUser}>
-              <Page {...props} />
-            </DashboardLayout>
-          ) : (
-            <DefaultLayout>
-              <Page {...props} />
-            </DefaultLayout>
-          )}
+          <Head>
+            <title>Super OS</title>
+          </Head>
+          <Page {...props} />
         </App>
       )
     }

@@ -1,11 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import DashBoardLayout from '../layout/dashboardLayout'
-
 import defaultPage from './defaultPage'
 
-const securePageHoc = Page =>
+const securePageNoLayoutHoc = Page =>
   class SecurePage extends React.Component {
     static getInitialProps(ctx) {
       return Page.getInitialProps && Page.getInitialProps(ctx)
@@ -27,13 +25,8 @@ const securePageHoc = Page =>
         return <h5>Not Authorized</h5>
       }
 
-      console.log(props.loggedUser)
-      return (
-        <DashBoardLayout loggedUser={props.loggedUser}>
-          <Page {...props} />
-        </DashBoardLayout>
-      )
+      return <Page {...props} />
     }
   }
 
-export default Page => defaultPage(securePageHoc(Page))
+export default Page => defaultPage(securePageNoLayoutHoc(Page))
