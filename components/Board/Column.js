@@ -24,45 +24,37 @@ const TaskList = styled.div`
   min-height: 100px;
 `
 
-class Column extends React.Component {
-  state = {}
+const Column = ({column, index, tasks}) => (
+  <Draggable draggableId={column.id} index={index}>
+    {provided => (
+      <Container {...provided.draggableProps} ref={provided.innerRef}>
+        <Title {...provided.dragHandleProps} type="task">
+          {column.title}
+        </Title>
+        <Droppable droppableId={column.id}>
+          {(provided, snapshot) => (
+            <TaskList
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              isDraggingOver={snapshot.isDraggingOver}
+            >
+              <InnerList tasks={tasks} />
 
-  render() {
-    const {column, tasks, index} = this.props
-
-    return (
-      <Draggable draggableId={column.id} index={index}>
-        {provided => (
-          <Container {...provided.draggableProps} ref={provided.innerRef}>
-            <Title {...provided.dragHandleProps} type="task">
-              {column.title}
-            </Title>
-            <Droppable droppableId={column.id}>
-              {(provided, snapshot) => (
-                <TaskList
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  isDraggingOver={snapshot.isDraggingOver}
-                >
-                  <InnerList tasks={tasks} />
-
-                  {provided.placeholder}
-                  <h5>Add Another Card</h5>
-                </TaskList>
-              )}
-            </Droppable>
-          </Container>
-        )}
-      </Draggable>
-    )
-  }
-}
+              {provided.placeholder}
+              <h5>Add Another Card</h5>
+            </TaskList>
+          )}
+        </Droppable>
+      </Container>
+    )}
+  </Draggable>
+)
 
 Column.propTypes = {
   column: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    taskIds: PropTypes.arrayOf(PropTypes.number),
+    taskIds: PropTypes.arrayOf(PropTypes.string),
   }),
   tasks: PropTypes.arrayOf(
     PropTypes.shape({

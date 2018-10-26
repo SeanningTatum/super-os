@@ -8,9 +8,9 @@ class ColumnInnerList extends PureComponent {
     column: PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      taskIds: PropTypes.arrayOf(PropTypes.number),
+      taskIds: PropTypes.arrayOf(PropTypes.string),
     }),
-    taskMap: PropTypes.arrayOf(
+    taskMap: PropTypes.objectOf(
       PropTypes.shape({
         id: PropTypes.string.isRequired,
         content: PropTypes.string.isRequired,
