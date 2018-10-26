@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import {DragDropContext, Droppable} from 'react-beautiful-dnd'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Head from 'next/head'
 import {Query} from 'react-apollo'
@@ -22,6 +23,10 @@ const GET_BOARD = gql`
 class Board extends Component {
   static getInitialProps({query}) {
     return {board_id: query.id}
+  }
+
+  static propTypes = {
+    board_id: PropTypes.string.isRequired,
   }
 
   state = {
@@ -146,6 +151,12 @@ class Board extends Component {
                   )}
                 </Droppable>
               </DragDropContext>
+
+              <style global>{`
+                body {
+                  background-color: ${Board.background};
+                }
+              `}</style>
             </Fragment>
           )
         }}
