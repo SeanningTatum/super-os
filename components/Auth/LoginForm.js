@@ -28,9 +28,8 @@ const LoginForm = ({client}) => {
 
           // Force a reload of all the current queries now that the user is
           // logged in
-          client.cache.reset().then(() => {
-            redirect({}, '/dashboard')
-          })
+          client.cache.reset()
+          redirect({}, '/dashboard')
         }}
       >
         {(signin, {data, error}) => (

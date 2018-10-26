@@ -10,12 +10,9 @@ import {Button} from './UI'
 
 const onLogout = client => {
   AuthService.unsetToken()
-  client.cache
-    .reset()
-    .then(() => {
-      redirect({}, '/')
-    })
-    .catch(error => console.error(error))
+  redirect({}, '/')
+
+  client.cache.reset().catch(error => console.error(error))
 }
 
 const Header = ({client}) => (
