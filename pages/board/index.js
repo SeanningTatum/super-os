@@ -2,14 +2,30 @@ import React, {Component, Fragment} from 'react'
 import {DragDropContext, Droppable} from 'react-beautiful-dnd'
 import styled from 'styled-components'
 import Head from 'next/head'
+import {Query} from 'react-apollo'
+import gql from 'graphql-tag'
 
 import initialData from '../../utils/initData'
 import ColumnInnerList from '../../components/Board/ColumnInnerList'
+import SecurePageNoLayout from '../../hocs/securePageNoLayout'
+
+const GET_BOARD = gql`
+  query($board_id: ID!) {
+    Board(board_id: $board_id) {
+      id
+      name
+      background
+    }
+  }
+`
 
 class Board extends Component {
+  static getInitialProps({query}) {
+    return {board_id: query.id}
+  }
+
   state = {
     ...initialData,
-    pageTitle: 'Practice Board',
   }
 
   onDragEnd = result => {
@@ -96,35 +112,44 @@ class Board extends Component {
   }
 
   render() {
-    const {state} = this
+    const {state, props} = this
 
     return (
-      <Fragment>
-        <Head>
-          <title>{state.pageTitle}</title>
-        </Head>
+      <Query query={GET_BOARD} variables={{board_id: props.board_id}}>
+        {({data, error, loading}) => {
+          if (loading) return <h5>Loading...</h5>
 
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <Droppable droppableId="all-columns" direction="horizontal" type="column">
-            {provided => (
-              <Container ref={provided.innerRef} {...provided.droppableProps}>
-                {state.columnOrder.map((columnID, index) => {
-                  const column = state.columns[columnID]
-                  return (
-                    <ColumnInnerList
-                      key={column.id}
-                      column={column}
-                      taskMap={state.tasks}
-                      index={index}
-                    />
-                  )
-                })}
-                {provided.placeholder}
-              </Container>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </Fragment>
+          const {Board} = data
+
+          return (
+            <Fragment>
+              <Head>
+                <title>{`${Board.name} | Super OS` || 'Super OS'}</title>
+              </Head>
+              <DragDropContext onDragEnd={this.onDragEnd}>
+                <Droppable droppableId="all-columns" direction="horizontal" type="column">
+                  {provided => (
+                    <Container ref={provided.innerRef} {...provided.droppableProps}>
+                      {state.columnOrder.map((columnID, index) => {
+                        const column = state.columns[columnID]
+                        return (
+                          <ColumnInnerList
+                            key={column.id}
+                            column={column}
+                            taskMap={state.tasks}
+                            index={index}
+                          />
+                        )
+                      })}
+                      {provided.placeholder}
+                    </Container>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </Fragment>
+          )
+        }}
+      </Query>
     )
   }
 }
@@ -133,4 +158,4 @@ const Container = styled.div`
   display: flex;
 `
 
-export default Board
+export default SecurePageNoLayout(Board)
