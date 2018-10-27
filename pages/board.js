@@ -117,25 +117,21 @@ class Board extends Component {
   }
 
   addTaskToColumn = (columnID, newTask) => {
-    const tempState = {...this.state}
+    const {state} = this
 
-    const newTasks = {
-      ...tempState.tasks,
-      [newTask.id]: newTask,
-    }
-
-    const updatedColumn = tempState.columns[columnID]
-    updatedColumn.taskIds.push(newTask.id)
-
-    const newColumns = {
-      ...tempState.columns,
-      [columnID]: updatedColumn,
-    }
+    const updatedColumn = {...state.columns[columnID]}
+    updatedColumn.taskIds = [...updatedColumn.taskIds, newTask.id]
 
     const newState = {
-      ...tempState,
-      tasks: {...newTasks},
-      columns: {...newColumns},
+      ...state,
+      tasks: {
+        ...state.tasks,
+        [newTask.id]: newTask,
+      },
+      columns: {
+        ...state.columns,
+        [columnID]: updatedColumn,
+      },
     }
 
     this.setState(newState)
