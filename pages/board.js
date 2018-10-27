@@ -116,6 +116,31 @@ class Board extends Component {
     this.setState(newState)
   }
 
+  addTaskToColumn = (columnID, newTask) => {
+    const tempState = {...this.state}
+
+    const newTasks = {
+      ...tempState.tasks,
+      [newTask.id]: newTask,
+    }
+
+    const updatedColumn = tempState.columns[columnID]
+    updatedColumn.taskIds.push(newTask.id)
+
+    const newColumns = {
+      ...tempState.columns,
+      [columnID]: updatedColumn,
+    }
+
+    const newState = {
+      ...tempState,
+      tasks: {...newTasks},
+      columns: {...newColumns},
+    }
+
+    this.setState(newState)
+  }
+
   render() {
     const {state, props} = this
 
@@ -143,6 +168,7 @@ class Board extends Component {
                             column={column}
                             taskMap={state.tasks}
                             index={index}
+                            addTaskToColumn={this.addTaskToColumn}
                           />
                         )
                       })}

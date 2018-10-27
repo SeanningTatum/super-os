@@ -10,3 +10,4 @@ package-lock.json
 config.json
 yarn.lock
 yarn-error.log
+.env

@@ -17,13 +17,14 @@ class ColumnInnerList extends PureComponent {
       })
     ),
     index: PropTypes.any.isRequired, // eslint-disable-line
+    addTaskToColumn: PropTypes.func.isRequired,
   }
 
   render() {
-    const {column, taskMap, index} = this.props
+    const {column, taskMap, index, addTaskToColumn} = this.props
     const tasks = column.taskIds.map(taskID => taskMap[taskID])
 
-    return <Column column={column} tasks={tasks} index={index} />
+    return <Column column={column} tasks={tasks} index={index} addTaskToColumn={addTaskToColumn} />
   }
 }
 
