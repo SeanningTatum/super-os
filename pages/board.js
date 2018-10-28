@@ -43,6 +43,7 @@ class Board extends Component {
     // If User just put the Draggable in the same place
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
 
+    // Moving Column
     if (type === 'column') {
       const newColumnOrder = [...state.columnOrder]
       newColumnOrder.splice(source.index, 1)
@@ -152,6 +153,9 @@ class Board extends Component {
               <Head>
                 <title>{`${Board.name} | Super OS` || 'Super OS'}</title>
               </Head>
+              <Header>
+                <BoardTitle>{Board.name}</BoardTitle>
+              </Header>
               <DragDropContext onDragEnd={this.onDragEnd}>
                 <Droppable droppableId="all-columns" direction="horizontal" type="column">
                   {provided => (
@@ -190,6 +194,19 @@ class Board extends Component {
 const Container = styled.div`
   display: flex;
   align-items: flex-start;
+`
+
+const Header = styled.div`
+  height: 50px;
+  /* background-color: rgba(0, 0, 0, 0.2); */
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+`
+const BoardTitle = styled.h3`
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
 `
 
 export default securePage(Board)
