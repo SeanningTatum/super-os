@@ -60,7 +60,7 @@ class SignupForm extends Component {
           // Force a reload of all the current queries now that the user is
           // logged in
           props.client.cache.reset().then(() => {
-            redirect({}, '/secret')
+            redirect({}, '/dashboard')
           })
         }}
       >

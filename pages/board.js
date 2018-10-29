@@ -1,9 +1,9 @@
-import {Component, Fragment} from 'react'
+import {PureComponent, Fragment} from 'react'
 import {DragDropContext, Droppable} from 'react-beautiful-dnd'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Head from 'next/head'
-import {Query} from 'react-apollo'
+import {withApollo} from 'react-apollo'
 import gql from 'graphql-tag'
 
 import initialData from '../utils/initData'
@@ -16,11 +16,24 @@ const GET_BOARD = gql`
       id
       name
       background
+
+      columns {
+        id
+        title
+        taskIds
+      }
+
+      tasks {
+        id
+        content
+      }
+
+      columnOrder
     }
   }
 `
 
-class Board extends Component {
+class Board extends PureComponent {
   static getInitialProps({query}) {
     return {board_id: query.id}
   }
@@ -29,8 +42,39 @@ class Board extends Component {
     board_id: PropTypes.string.isRequired,
   }
 
+  // state = {
+  //   ...initialData,
+  // }
+
   state = {
-    ...initialData,
+    tasks: {},
+    columns: {},
+    columnOrder: [],
+    loading: true,
+  }
+
+  async componentDidMount() {
+    const {client, board_id} = this.props
+
+    const {data} = await client.query({
+      query: GET_BOARD,
+      variables: {
+        board_id,
+      },
+    })
+
+    const {columns, tasks, columnOrder, name, background} = data.Board
+
+    const {columnsMap, tasksMap} = this.mapColumnsAndTasks(columns, tasks)
+
+    this.setState({
+      columnOrder,
+      columns: columnsMap,
+      tasks: tasksMap,
+      boardName: name,
+      backgroundColor: background,
+      loading: false,
+    })
   }
 
   onDragEnd = result => {
@@ -117,6 +161,18 @@ class Board extends Component {
     this.setState(newState)
   }
 
+  mapColumnsAndTasks = (columns, tasks) => {
+    const {state} = this
+
+    const columnsMap = columns.reduce(
+      (obj, item) => ((obj[item.id] = {...item}), obj),
+      state.columns
+    )
+    const tasksMap = tasks.reduce((obj, item) => ((obj[item.id] = {...item}), obj), state.tasks)
+
+    return {columnsMap, tasksMap}
+  }
+
   addTaskToColumn = (columnID, newTask) => {
     const {state} = this
 
@@ -139,54 +195,47 @@ class Board extends Component {
   }
 
   render() {
-    const {state, props} = this
+    const {state} = this
+
+    if (state.loading) return <h5>Loading...</h5>
 
     return (
-      <Query query={GET_BOARD} variables={{board_id: props.board_id}}>
-        {({data, error, loading}) => {
-          if (loading) return <h5>Loading...</h5>
+      <Fragment>
+        <Head>
+          <title>{`${state.boardName} | Super OS` || 'Super OS'}</title>
+        </Head>
+        <Header>
+          <BoardTitle>{state.boardName}</BoardTitle>
+        </Header>
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          <Droppable droppableId="all-columns" direction="horizontal" type="column">
+            {provided => (
+              <Container ref={provided.innerRef} {...provided.droppableProps}>
+                {state.columnOrder.map((columnID, index) => {
+                  const column = state.columns[columnID]
 
-          const {Board} = data
+                  return (
+                    <ColumnInnerList
+                      key={column.id}
+                      column={column}
+                      taskMap={state.tasks}
+                      index={index}
+                      addTaskToColumn={this.addTaskToColumn}
+                    />
+                  )
+                })}
+                {provided.placeholder}
+              </Container>
+            )}
+          </Droppable>
+        </DragDropContext>
 
-          return (
-            <Fragment>
-              <Head>
-                <title>{`${Board.name} | Super OS` || 'Super OS'}</title>
-              </Head>
-              <Header>
-                <BoardTitle>{Board.name}</BoardTitle>
-              </Header>
-              <DragDropContext onDragEnd={this.onDragEnd}>
-                <Droppable droppableId="all-columns" direction="horizontal" type="column">
-                  {provided => (
-                    <Container ref={provided.innerRef} {...provided.droppableProps}>
-                      {state.columnOrder.map((columnID, index) => {
-                        const column = state.columns[columnID]
-                        return (
-                          <ColumnInnerList
-                            key={column.id}
-                            column={column}
-                            taskMap={state.tasks}
-                            index={index}
-                            addTaskToColumn={this.addTaskToColumn}
-                          />
-                        )
-                      })}
-                      {provided.placeholder}
-                    </Container>
-                  )}
-                </Droppable>
-              </DragDropContext>
-
-              <style global="true">{`
-                body {
-                  background-color: ${Board.background};
-                }
-              `}</style>
-            </Fragment>
-          )
-        }}
-      </Query>
+        <style global="true">{`
+          body {
+            background-color: ${state.backgroundColor};
+          }
+        `}</style>
+      </Fragment>
     )
   }
 }
@@ -208,5 +257,4 @@ const BoardTitle = styled.h3`
   font-weight: 700;
   font-size: 16px;
 `
-
-export default securePage(Board)
+export default securePage(withApollo(Board))
