@@ -24,15 +24,17 @@ export default class Column extends Component {
     addTaskToColumn: PropTypes.func.isRequired, // Located in board.js
   }
 
-  cancelRef = null
+  constructor(props) {
+    super(props)
 
-  addCardRef = null
+    this.cancelRef = null
+    this.addCardRef = null
+    this.addCardButtonRef = null
 
-  addCardButtonRef = null
-
-  state = {
-    addCard: false,
-    input: '', // TODO - find better name
+    this.state = {
+      addCard: false,
+      input: '', // TODO - find better name
+    }
   }
 
   componentWillUnmount() {
@@ -71,7 +73,7 @@ export default class Column extends Component {
   }
 
   onEnterPress = e => {
-    if (e.keyCode == 13 && e.shiftKey == false) {
+    if (e.keyCode === 13 && e.shiftKey === false) {
       e.preventDefault()
       this.onAddTask()
     }
@@ -110,6 +112,8 @@ export default class Column extends Component {
                 </TaskList>
               )}
             </Droppable>
+
+            {/* Add Card Button */}
             {!state.addCard ? (
               <Footer onClick={this.openAddCard}>
                 <span>Add another card</span>
@@ -137,6 +141,7 @@ export default class Column extends Component {
                   >
                     Add Card
                   </AddCardButton>
+
                   <XCancel
                     ref={node => {
                       this.cancelRef = node

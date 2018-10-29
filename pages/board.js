@@ -4,34 +4,10 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Head from 'next/head'
 import {withApollo} from 'react-apollo'
-import gql from 'graphql-tag'
 
-import initialData from '../utils/initData'
 import ColumnInnerList from '../components/Board/ColumnInnerList'
 import securePage from '../hocs/securePage'
-
-const GET_BOARD = gql`
-  query($board_id: ID!) {
-    Board(board_id: $board_id) {
-      id
-      name
-      background
-
-      columns {
-        id
-        title
-        taskIds
-      }
-
-      tasks {
-        id
-        content
-      }
-
-      columnOrder
-    }
-  }
-`
+import BoardService from '../utils/boardService'
 
 class Board extends PureComponent {
   static getInitialProps({query}) {
@@ -42,28 +18,24 @@ class Board extends PureComponent {
     board_id: PropTypes.string.isRequired,
   }
 
-  // state = {
-  //   ...initialData,
-  // }
+  constructor(props) {
+    super(props)
+    this.boardService = new BoardService(props.client)
 
-  state = {
-    tasks: {},
-    columns: {},
-    columnOrder: [],
-    loading: true,
+    this.state = {
+      tasks: {},
+      columns: {},
+      columnOrder: [],
+      loading: true,
+    }
   }
 
   async componentDidMount() {
-    const {client, board_id} = this.props
+    const {board_id} = this.props
 
-    const {data} = await client.query({
-      query: GET_BOARD,
-      variables: {
-        board_id,
-      },
-    })
+    const board = await this.boardService.getBoard(board_id)
 
-    const {columns, tasks, columnOrder, name, background} = data.Board
+    const {columns, tasks, columnOrder, name, background} = board
 
     const {columnsMap, tasksMap} = this.mapColumnsAndTasks(columns, tasks)
 
@@ -174,8 +146,16 @@ class Board extends PureComponent {
   }
 
   addTaskToColumn = (columnID, newTask) => {
-    const {state} = this
+    const {state, props} = this
 
+    const {board_id} = props
+
+    // Logic to save to backend and delete optimistic update here
+    this.boardService
+      .addTaskToColumn(newTask, columnID, board_id, state)
+      .then(newState => this.setState(newState))
+
+    // Optimistic Update
     const updatedColumn = {...state.columns[columnID]}
     updatedColumn.taskIds = [...updatedColumn.taskIds, newTask.id]
 

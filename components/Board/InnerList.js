@@ -1,9 +1,9 @@
-import React from 'react'
+import {PureComponent} from 'react'
 import PropTypes from 'prop-types'
 
 import Task from './Task'
 
-class InnerList extends React.PureComponent {
+class InnerList extends PureComponent {
   static propTypes = {
     tasks: PropTypes.arrayOf(
       PropTypes.shape({
@@ -15,6 +15,7 @@ class InnerList extends React.PureComponent {
 
   render() {
     const {tasks} = this.props
+
     return tasks.map((task, index) => <Task task={task} index={index} key={task.id} />)
   }
 }
