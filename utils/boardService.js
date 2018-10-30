@@ -31,6 +31,36 @@ const CREATE_TASK = gql`
   }
 `
 
+const UPDATE_TASK_ORDER = gql`
+  mutation updateTaskOrder($column_id: ID!, $updated_task_id_arr: [String]!) {
+    updateTaskOrder(column_id: $column_id, updated_task_id_arr: $updated_task_id_arr)
+  }
+`
+
+const MOVE_TASK_TO_NEW_COLUMN = gql`
+  mutation moveTaskToNewColumn(
+    $start_column_id: ID!
+    $start_column_arr: [String!]
+    $finish_column_id: ID!
+    $finish_column_arr: [String!]
+  ) {
+    moveTaskToNewColumn(
+      start_column_id: $start_column_id
+      start_column_arr: $start_column_arr
+      finish_column_id: $finish_column_id
+      finish_column_arr: $finish_column_arr
+    )
+  }
+`
+
+const UPDATE_COLUMN_ORDER = gql`
+  mutation updateColumnOrder($board_id: ID!, $updated_column_order: [String]!) {
+    updateColumnOrder(board_id: $board_id, updated_column_order: $updated_column_order) {
+      id
+    }
+  }
+`
+
 export default class BoardService {
   constructor(client) {
     this.apolloClient = client
@@ -83,11 +113,37 @@ export default class BoardService {
     return newState
   }
 
-  async updateColumnOrder() {
-    // TODO
+  async updateColumnOrder(board_id, updated_column_order) {
+    this.apolloClient.mutate({
+      mutation: UPDATE_COLUMN_ORDER,
+      variables: {
+        board_id,
+        updated_column_order,
+      },
+    })
   }
 
-  async updateTaskOrder() {
-    // TODO
+  updateTaskOrder(column_id, updated_task_id_arr) {
+    this.apolloClient.mutate({
+      mutation: UPDATE_TASK_ORDER,
+      variables: {
+        column_id,
+        updated_task_id_arr,
+      },
+    })
+  }
+
+  async moveTaskToOtherColumn(startColumn, finishColumn) {
+    const data = await this.apolloClient.mutate({
+      mutation: MOVE_TASK_TO_NEW_COLUMN,
+      variables: {
+        start_column_id: startColumn.id,
+        start_column_arr: startColumn.taskIds,
+        finish_column_id: finishColumn.id,
+        finish_column_arr: finishColumn.taskIds,
+      },
+    })
+
+    console.log(data)
   }
 }

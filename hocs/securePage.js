@@ -10,7 +10,6 @@ const securePageHoc = Page =>
     static getInitialProps({pathname, ...ctx}) {
       const pageProps = Page.getInitialProps && Page.getInitialProps(ctx)
 
-      console.log('pathname', pathname)
       return {...pageProps, pathname}
     }
 

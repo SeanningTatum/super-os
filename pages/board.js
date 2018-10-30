@@ -61,9 +61,13 @@ class Board extends PureComponent {
 
     // Moving Column
     if (type === 'column') {
+      const {board_id} = this.props
+
       const newColumnOrder = [...state.columnOrder]
       newColumnOrder.splice(source.index, 1)
       newColumnOrder.splice(destination.index, 0, draggableId)
+
+      this.boardService.updateColumnOrder(board_id, newColumnOrder)
 
       const newState = {
         ...state,
@@ -77,6 +81,7 @@ class Board extends PureComponent {
     const start = state.columns[source.droppableId]
     const finish = state.columns[destination.droppableId]
 
+    // Rearranging task in same column
     if (start === finish) {
       const newTaskIds = [...start.taskIds]
 
@@ -90,6 +95,8 @@ class Board extends PureComponent {
         taskIds: newTaskIds,
       }
 
+      this.boardService.updateTaskOrder(newColumn.id, newTaskIds)
+
       const newState = {
         ...state,
         columns: {
@@ -102,7 +109,7 @@ class Board extends PureComponent {
       return
     }
 
-    // Moving from one list to another
+    // Moving task from one list to another
     const startTaskIds = [...start.taskIds]
     // Remove from source
     startTaskIds.splice(source.index, 1)
@@ -120,6 +127,8 @@ class Board extends PureComponent {
       ...finish,
       taskIds: finishTaskIds,
     }
+
+    this.boardService.moveTaskToOtherColumn(newStart, newFinish)
 
     const newState = {
       ...state,
