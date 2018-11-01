@@ -8,6 +8,7 @@ import {withApollo} from 'react-apollo'
 import ColumnInnerList from '../components/Board/ColumnInnerList'
 import securePage from '../hocs/securePage'
 import BoardService from '../utils/boardService'
+import AddColumn from '../components/Board/AddColumn'
 
 class Board extends PureComponent {
   static getInitialProps({query}) {
@@ -22,11 +23,15 @@ class Board extends PureComponent {
     super(props)
     this.boardService = new BoardService(props.client)
 
+    this.inputRef = null
+    this.addColRef = null
+
     this.state = {
       tasks: {},
       columns: {},
       columnOrder: [],
       loading: true,
+      addingColumn: false,
     }
   }
 
@@ -142,16 +147,84 @@ class Board extends PureComponent {
     this.setState(newState)
   }
 
-  mapColumnsAndTasks = (columns, tasks) => {
-    const {state} = this
+  handleClick = event => {
+    const {inputRef, addColRef, state} = this
+    const {addingColumn} = state
 
-    const columnsMap = columns.reduce(
-      (obj, item) => ((obj[item.id] = {...item}), obj),
-      state.columns
-    )
-    const tasksMap = tasks.reduce((obj, item) => ((obj[item.id] = {...item}), obj), state.tasks)
+    if (!addingColumn) return
+
+    if (event.target === addColRef) {
+      this.setState({addingColumn: false})
+      document.removeEventListener('mousedown', this.handleClick)
+      this.addColumn(inputRef.value)
+    } else if (inputRef && !this.inputRef.contains(event.target)) {
+      this.setState({addingColumn: false})
+
+      document.removeEventListener('mousedown', this.handleClick)
+    }
+  }
+
+  onEnterPress = e => {
+    if (e.keyCode === 13 && e.shiftKey === false) {
+      e.preventDefault()
+      this.addColumn(this.inputRef.value)
+    }
+  }
+
+  toggleAddingColumn = async () => {
+    document.addEventListener('mousedown', this.handleClick)
+    await this.setState({addingColumn: true})
+    this.inputRef.focus()
+  }
+
+  mapColumnsAndTasks = (columns, tasks) => {
+    const columnsMap = columns.reduce((obj, item) => ((obj[item.id] = {...item}), obj), {})
+    const tasksMap = tasks.reduce((obj, item) => ((obj[item.id] = {...item}), obj), {})
 
     return {columnsMap, tasksMap}
+  }
+
+  addColumn = columnName => {
+    const {board_id} = this.props
+    const {state} = this
+    const tempID = Math.floor(Math.random() * 10).toString()
+
+    this.boardService
+      .createColumn(columnName, board_id)
+      .then(({data}) => {
+        const column = data.createColumn
+        const newState = {...state}
+        console.log(column)
+
+        // Delete column
+        delete newState.columns[tempID]
+        // Delete from column order
+        const index = newState.columnOrder.indexOf(tempID)
+        if (index !== -1) newState.columnOrder.splice(index, 1)
+
+        // Update with data from server
+        const updatedColumnOrder = [...newState.columnOrder, column.id]
+
+        const updatedColumns = {...newState.columns}
+        updatedColumns[column.id] = {...column}
+
+        this.setState({columns: updatedColumns, columnOrder: updatedColumnOrder})
+        console.log(newState)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+
+    // Optimistic Update
+    const {columns, columnOrder} = this.state
+    const updatedColumns = {...columns}
+
+    updatedColumns[tempID] = {id: tempID, title: columnName, taskIds: []}
+    const updatedColumnOrder = [...columnOrder, tempID]
+
+    this.inputRef.value = ''
+
+    this.setState({columns: updatedColumns, columnOrder: updatedColumnOrder, addingColumn: false})
   }
 
   addTaskToColumn = (columnID, newTask) => {
@@ -213,6 +286,25 @@ class Board extends PureComponent {
                     />
                   )
                 })}
+
+                {/* Add Column */}
+
+                {!state.addingColumn ? (
+                  <NoColumn onClick={this.toggleAddingColumn}>
+                    <WhiteText>+ Add list</WhiteText>
+                  </NoColumn>
+                ) : (
+                  <AddColumn
+                    inputRef={node => {
+                      this.inputRef = node
+                    }}
+                    addColRef={node => {
+                      this.addColRef = node
+                    }}
+                    onEnterPress={this.onEnterPress}
+                  />
+                )}
+
                 {provided.placeholder}
               </Container>
             )}
@@ -232,6 +324,9 @@ class Board extends PureComponent {
 const Container = styled.div`
   display: flex;
   align-items: flex-start;
+  white-space: nowrap;
+  overflow: auto;
+  height: 100vh;
 `
 
 const Header = styled.div`
@@ -246,4 +341,29 @@ const BoardTitle = styled.h3`
   font-weight: 700;
   font-size: 16px;
 `
+const NoColumn = styled.div`
+  flex: 0 0 auto;
+
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  border-radius: 4px;
+  height: 40px;
+
+  margin: 8px;
+  width: 250px;
+
+  border-radius: 4px;
+
+  display: flex;
+
+  align-items: center;
+  padding: 0 1rem;
+  cursor: pointer;
+  z-index: 100;
+`
+
+const WhiteText = styled.h5`
+  color: white;
+`
+
 export default securePage(withApollo(Board))

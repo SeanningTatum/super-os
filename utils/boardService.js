@@ -61,6 +61,16 @@ const UPDATE_COLUMN_ORDER = gql`
   }
 `
 
+const CREATE_COLUMN = gql`
+  mutation createColumn($board_id: ID!, $title: String!) {
+    createColumn(board_id: $board_id, title: $title) {
+      id
+      title
+      taskIds
+    }
+  }
+`
+
 export default class BoardService {
   constructor(client) {
     this.apolloClient = client
@@ -145,5 +155,15 @@ export default class BoardService {
     })
 
     console.log(data)
+  }
+
+  async createColumn(title, board_id) {
+    return this.apolloClient.mutate({
+      mutation: CREATE_COLUMN,
+      variables: {
+        board_id,
+        title,
+      },
+    })
   }
 }

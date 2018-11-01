@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {Droppable, Draggable} from 'react-beautiful-dnd'
 
-import {Button} from '../UI'
-
 import InnerList from './InnerList'
+import AddTask from './AddTask'
 
 export default class Column extends Component {
   static propTypes = {
@@ -44,16 +43,18 @@ export default class Column extends Component {
   handleClickOutside = event => {
     const {addCard} = this.state
 
-    if (addCard && this.cancelRef && this.cancelRef === event.target) {
+    if (!addCard) return
+
+    if (this.cancelRef && this.cancelRef === event.target) {
       // User clicked the X
       this.closeAddCard()
       this.clearInput()
       document.removeEventListener('mousedown', this.handleClickOutside)
-    } else if (addCard && this.addCardButtonRef && this.addCardButtonRef === event.target) {
+    } else if (this.addCardButtonRef && this.addCardButtonRef === event.target) {
       // User clicked add task
       this.onAddTask()
       document.removeEventListener('mousedown', this.handleClickOutside)
-    } else if (addCard && this.addCardRef && !this.addCardRef.contains(event.target)) {
+    } else if (this.addCardRef && !this.addCardRef.contains(event.target)) {
       // Clicked anywhere else
       this.closeAddCard()
       document.removeEventListener('mousedown', this.handleClickOutside)
@@ -66,6 +67,7 @@ export default class Column extends Component {
 
     const task = {id: Math.floor(Math.random() * Math.floor(100)).toString(), content: input}
 
+    // All logic goes in here including removing
     addTaskToColumn(column.id, task)
 
     this.closeAddCard()
@@ -81,10 +83,13 @@ export default class Column extends Component {
 
   clearInput = () => this.setState({input: ''})
 
-  openAddCard = () => {
+  openAddCard = async () => {
     document.addEventListener('mousedown', this.handleClickOutside)
-    this.setState({addCard: true})
+    await this.setState({addCard: true})
+    this.addCardRef.focus()
   }
+
+  taskInputOnChangeHandler = value => this.setState({input: value})
 
   closeAddCard = () => this.setState({addCard: false})
 
@@ -116,41 +121,23 @@ export default class Column extends Component {
             {/* Add Card Button */}
             {!state.addCard ? (
               <Footer onClick={this.openAddCard}>
-                <span>Add another card</span>
+                <span>+ Add another card</span>
               </Footer>
             ) : (
-              <AddCardFooter>
-                <AddCardTextArea
-                  ref={node => {
-                    this.addCardRef = node
-                  }}
-                  value={state.input}
-                  placeholder="Enter a title for this card..."
-                  onKeyDown={e => this.onEnterPress(e)}
-                  onChange={e => this.setState({input: e.target.value})}
-                />
-                <SubmitArea>
-                  <AddCardButton
-                    success
-                    nomargin
-                    small
-                    type="submit"
-                    ref={node => {
-                      this.addCardButtonRef = node
-                    }}
-                  >
-                    Add Card
-                  </AddCardButton>
-
-                  <XCancel
-                    ref={node => {
-                      this.cancelRef = node
-                    }}
-                  >
-                    X
-                  </XCancel>
-                </SubmitArea>
-              </AddCardFooter>
+              <AddTask
+                addCardButtonRef={node => {
+                  this.addCardButtonRef = node
+                }}
+                addCardRef={node => {
+                  this.addCardRef = node
+                }}
+                cancelRef={node => {
+                  this.cancelRef = node
+                }}
+                onEnterPress={this.onEnterPress}
+                taskInputOnChangeHandler={this.taskInputOnChangeHandler}
+                inputVal={state.input}
+              />
             )}
           </Container>
         )}
@@ -162,8 +149,10 @@ export default class Column extends Component {
 // Styles
 
 const Container = styled.div`
+  flex: 0 0 auto;
   margin: 8px;
   width: 250px;
+  overflow-y: auto;
 
   border-radius: 4px;
   background-color: #dfe3e6;
@@ -193,51 +182,5 @@ const Footer = styled.div`
     background-color: rgba(0, 0, 0, 0.15);
     border-radius: 0px 0px 4px 4px;
     cursor: pointer;
-  }
-`
-
-const AddCardTextArea = styled.textarea`
-  border: 1px solid lightgrey;
-  padding: 8px;
-  margin-bottom: 8px;
-  border: none;
-  border-radius: 4px;
-  background-color: white;
-  flex-grow: 1;
-  resize: none;
-  rows: 3;
-  font-size: 13px;
-
-  &::placeholder {
-    font-size: 13px;
-  }
-`
-const AddCardFooter = styled.div`
-  padding: 0 8px 8px;
-  display: flex;
-  flex-direction: column;
-`
-
-const AddCardButton = styled(Button)`
-  padding: 7px;
-  width: 40%;
-  margin-right: 15px;
-`
-
-const SubmitArea = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-
-const XCancel = styled.h5`
-  font-weight: 800;
-  margin: 0;
-  cursor: pointer;
-  padding: 3px;
-
-  &:hover {
-    color: rgba(0, 0, 0, 0.5);
-    font-size: 120%;
   }
 `
