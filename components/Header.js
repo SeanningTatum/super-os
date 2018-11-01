@@ -32,9 +32,9 @@ Header.propTypes = {
 }
 
 const HeaderWrapper = styled.header`
-  background-color: ${props => (props.inBoardPage ? 'rgba(0,0,0, 0.2)' : '#fff')};
+  background-color: ${props => (props.inBoardPage ? 'rgba(0,0,0, 0.25)' : '#fff')};
   position: sticky;
-  height: 50px;
+  height: 45px;
   padding: 0 5rem;
   display: flex;
   align-items: center;
